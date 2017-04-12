@@ -1,0 +1,9 @@
+[package]
+authors = ["alarm"]
+name = "swiper"
+version = "0.1.0"
+
+[dependencies]
+byteorder = "1.0.0"
+ioctl = "0.3.3"
+void = "1.0.2"
