@@ -1,5 +1,5 @@
 use event_stream::EventStream;
-use futures::{Async, Poll, Stream};
+use futures::{Poll, Stream};
 use std::io::Error;
 
 pub struct BarcodeStream {
@@ -28,12 +28,7 @@ impl Stream for BarcodeStream {
 
     fn poll(&mut self) -> Poll<Option<String>, Error> {
         println!("BCODE POLL");
-        let ev = match self.evs.poll() {
-            Ok(Async::Ready(Some(ev))) => ev,
-            Ok(Async::Ready(None)) => return Ok(Async::Ready(None)),
-            Ok(Async::NotReady) => return Ok(Async::NotReady),
-            Err(err) => return Err(err),
-        };
+        let ev = try_ready!(self.evs.poll());
         println!("Got event {:?}", ev);
         unimplemented!()
     }

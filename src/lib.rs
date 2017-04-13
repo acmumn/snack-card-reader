@@ -1,4 +1,5 @@
 extern crate byteorder;
+#[macro_use]
 extern crate futures;
 extern crate ioctls;
 extern crate void;
