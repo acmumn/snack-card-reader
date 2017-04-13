@@ -1,6 +1,6 @@
 [package]
-authors = ["alarm"]
-name = "swiper"
+authors = ["Nathan Ringo <remexre@gmail.com>"]
+name = "snack-card-reader"
 version = "0.1.0"
 
 [dependencies]
