@@ -1,13 +1,15 @@
 extern crate futures;
 extern crate snack_card_reader;
 
-use snack_card_reader::BarcodeStream;
+// use snack_card_reader::BarcodeStream;
 use snack_card_reader::EventStream;
-use futures::executor::spawn;
 use futures::future::ok;
 use futures::{Future, Stream};
 
 fn main() {
+    #[cfg(feature = "x11")]
+    snack_card_reader::x11_disable_reader();
+
     let stream = EventStream::new()
         .expect("couldn't open barcode reader");
     //let stream = BarcodeStream::new()

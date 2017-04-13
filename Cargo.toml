@@ -7,7 +7,22 @@ version = "0.1.0"
 byteorder = "1.0.0"
 futures = "0.1.13"
 ioctls = "0.5.1"
+libc = "0.2.21"
 void = "1.0.2"
+
+[dependencies."x11-highlevel"]
+# git = "https://github.com/remexre/x11-highlevel.git"
+optional = true
+path = "../x11-highlevel"
+version = "0.1.0"
+
+[[bin]]
+doc = false
+name = "snack-card-reader"
+
+[features]
+default = ["x11"]
+x11 = ["x11-highlevel"]
 
 [replace]
 "ioctls:0.5.1" = { git = "https://github.com/acmumn/ioctl.git" }
