@@ -1,25 +1,29 @@
 use futures::{Async, Poll, Stream};
 use ioctls::input_event;
 use low_level_hw;
-use std::error::Error;
-use std::io::Error as IoError;
-use std::sync::mpsc::{channel, Receiver};
+use std::io::Error;
+use std::sync::mpsc::{channel, Receiver, TryRecvError};
 use std::thread::Builder;
 
 pub struct EventStream {
-    recv: Receiver<Result<input_event, IoError>>,
+    recv: Receiver<Result<input_event, Error>>,
     name: String,
 }
 
 impl EventStream {
     /// Creates a new EventStream.
-    pub fn new() -> Result<EventStream, Box<Error>> {
+    pub fn new() -> Result<EventStream, Error> {
         let mut file = low_level_hw::get_device()
             .expect("TODO GET A REAL ERROR HERE");
         let name = low_level_hw::get_device_name(&mut file);
         let (send, recv) = channel();
         try!(Builder::new().spawn(move || {
-            while let Ok(()) = send.send(low_level_hw::read_input_event(&mut file)) {}
+            loop {
+                let result = low_level_hw::read_input_event(&mut file);
+                if let Err(err) = send.send(result) {
+                    println!("Error: {:?}", err);
+                }
+            }
         }));
         Ok(EventStream { name, recv })
     }
@@ -32,13 +36,16 @@ impl EventStream {
 
 impl Stream for EventStream {
     type Item = input_event;
-    type Error = Box<Error>;
+    type Error = Error;
 
-    fn poll(&mut self) -> Poll<Option<input_event>, Box<Error>> {
-        match self.recv.try_recv() {
+    fn poll(&mut self) -> Poll<Option<input_event>, Error> {
+        let res = match self.recv.try_recv() {
             Ok(Ok(ev)) => Ok(Async::Ready(Some(ev))),
-            Err(err) => Err(From::from(err)),
-            _ => unimplemented!(),
-        }
+            Ok(Err(err)) => Err(err),
+            Err(TryRecvError::Empty) => Ok(Async::NotReady),
+            Err(TryRecvError::Disconnected) => Ok(Async::Ready(None)),
+        };
+        println!("EVENT POLL -> {:?}", res);
+        res
     }
 }

@@ -1,7 +1,6 @@
 use event_stream::EventStream;
-use futures::{Poll, Stream};
-use ioctls::input_event;
-use std::error::Error;
+use futures::{Async, Poll, Stream};
+use std::io::Error;
 
 pub struct BarcodeStream {
     buf: String,
@@ -10,7 +9,7 @@ pub struct BarcodeStream {
 
 impl BarcodeStream {
     /// Creates a new BarcodeStream.
-    pub fn new() -> Result<BarcodeStream, Box<Error>> {
+    pub fn new() -> Result<BarcodeStream, Error> {
         EventStream::new().map(BarcodeStream::wrap)
     }
 
@@ -25,9 +24,17 @@ impl BarcodeStream {
 
 impl Stream for BarcodeStream {
     type Item = String;
-    type Error = Box<Error>;
+    type Error = Error;
 
-    fn poll(&mut self) -> Poll<Option<String>, Box<Error>> {
+    fn poll(&mut self) -> Poll<Option<String>, Error> {
+        println!("BCODE POLL");
+        let ev = match self.evs.poll() {
+            Ok(Async::Ready(Some(ev))) => ev,
+            Ok(Async::Ready(None)) => return Ok(Async::Ready(None)),
+            Ok(Async::NotReady) => return Ok(Async::NotReady),
+            Err(err) => return Err(err),
+        };
+        println!("Got event {:?}", ev);
         unimplemented!()
     }
 }
