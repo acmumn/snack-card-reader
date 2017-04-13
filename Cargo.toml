@@ -5,5 +5,9 @@ version = "0.1.0"
 
 [dependencies]
 byteorder = "1.0.0"
-ioctl = "0.3.3"
+futures = "0.1.13"
+ioctls = "0.5.1"
 void = "1.0.2"
+
+[replace]
+"ioctls:0.5.1" = { git = "https://github.com/acmumn/ioctl.git" }

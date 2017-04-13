@@ -1,22 +1,24 @@
 extern crate byteorder;
-extern crate ioctl;
+extern crate ioctls;
 extern crate void;
 
 use byteorder::{ByteOrder, NativeEndian};
-use ioctl::input_event;
-use ioctl::libc::timeval;
-use std::fs::File;
-use std::io::prelude::*;
-use std::mem::size_of;
 use void::{Void, ResultVoidErrExt};
 
+mod llhw;
+
 fn main() {
+    let x = llhw::get_devices();
+    println!("{:?}", x);
+    /*
     loop {
         let event_num = 1;
         println!("{:?}", run(event_num).void_unwrap_err());
     }
+    */
 }
 
+/*
 fn run(event_num: usize) -> Result<Void, std::io::Error> {
     let mut f = File::open(format!("/dev/input/event{}", event_num))?;
     loop {
@@ -44,3 +46,4 @@ fn read_input_event<R: Read>(mut r: R) -> Result<input_event, std::io::Error> {
         value,
     })
 }
+*/
