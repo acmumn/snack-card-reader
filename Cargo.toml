@@ -3,11 +3,24 @@ authors = ["Nathan Ringo <remexre@gmail.com>"]
 name = "snack-card-reader"
 version = "0.1.0"
 
+[[bin]]
+doc = false
+name = "snack-card-reader"
+
 [dependencies]
 byteorder = "1.0.0"
-futures = "0.1.13"
+env_logger = "0.4.2"
+hyper = "0.10.8"
+hyper-rustls = "0.3.2"
 ioctls = "0.5.1"
-void = "1.0.2"
+log = "0.3.7"
+num = "0.1.37"
+rustls = "0.5.8"
+serde_derive = "0.9.13"
+toml = "0.3.2"
 
 [replace]
-"ioctls:0.5.1" = { git = "https://github.com/acmumn/ioctl.git" }
+
+[replace."ioctls:0.5.1"]
+branch = "evdev-arm"
+git = "https://github.com/acmumn/ioctl.git"

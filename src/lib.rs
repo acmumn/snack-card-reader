@@ -1,12 +1,19 @@
 extern crate byteorder;
-#[macro_use]
-extern crate futures;
+extern crate hyper;
+extern crate hyper_rustls;
 extern crate ioctls;
-extern crate void;
+#[macro_use]
+extern crate log;
+extern crate num;
+#[macro_use]
+extern crate serde_derive;
+extern crate rustls;
+extern crate toml;
 
-mod barcode_stream;
-mod event_stream;
-mod low_level_hw;
+mod barcode;
+mod server;
 
-pub use barcode_stream::BarcodeStream;
-pub use event_stream::EventStream;
+pub use barcode::Barcode;
+pub use barcode::Error as BarcodeError;
+pub use barcode::Iter as BarcodeIter;
+pub use barcode::Type as BarcodeType;
