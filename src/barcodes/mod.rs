@@ -3,10 +3,10 @@ mod hw;
 mod iter;
 mod scancodes;
 
+use errors::*;
 pub use self::iter::Iter;
 use std::fmt::{Display, Formatter};
 use std::fmt::Result as FmtResult;
-use std::io::Error as IoError;
 use std::str::FromStr;
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
@@ -21,21 +21,20 @@ impl Display for Barcode {
 impl FromStr for Barcode {
     type Err = Error;
 
-    fn from_str(s: &str) -> Result<Barcode, Error> {
+    fn from_str(s: &str) -> Result<Barcode> {
         if let Some(p) = s.bytes().position(|c| c == '=' as u8) {
             let (val, typ) = s.split_at(p);
             Ok(Barcode(Type::from_str(&typ[1..])?, val.to_string()))
         } else {
-            Err(Error::NotACard)
+            Err(ErrorKind::InvalidBarcode(s.to_string()).into())
         }
     }
 }
 
-#[derive(Debug)]
-pub enum Error {
-    InvalidType,
-    Io(IoError),
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+pub enum BarcodeError {
     NotACard,
+    UnknownType,
 }
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
@@ -54,10 +53,10 @@ impl Display for Type {
 impl FromStr for Type {
     type Err = Error;
 
-    fn from_str(s: &str) -> Result<Type, Error> {
+    fn from_str(s: &str) -> Result<Type> {
         match s {
             "99121006009530000" => Ok(Type::UCard),
-            _ => Err(Error::InvalidType),
+            _ => Err(ErrorKind::UnknownBarcodeType(s.to_string()).into()),
         }
     }
 }

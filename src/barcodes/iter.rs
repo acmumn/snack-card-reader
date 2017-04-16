@@ -1,8 +1,9 @@
+use errors::*;
 use num::FromPrimitive;
 use std::str::FromStr;
 use super::event_iter::EventIter;
 use super::scancodes::Key;
-use super::{Barcode, Error};
+use super::Barcode;
 
 pub struct Iter {
     evs: EventIter,
@@ -10,10 +11,11 @@ pub struct Iter {
 
 impl Iter {
     /// Creates a new Iter.
-    pub fn new() -> Result<Iter, Error> {
-        EventIter::new()
-            .map(Iter::wrap)
-            .map_err(Error::Io)
+    pub fn new() -> Result<Iter> {
+        match EventIter::new() {
+            Ok(evs) => Ok(Iter::wrap(evs)),
+            Err(err) => Err(err.into()),
+        }
     }
 
     /// Wraps an EventIter into a Iter.
@@ -25,9 +27,9 @@ impl Iter {
 }
 
 impl Iterator for Iter {
-    type Item = Result<Barcode, Error>;
+    type Item = Result<Barcode>;
 
-    fn next(&mut self) -> Option<Result<Barcode, Error>> {
+    fn next(&mut self) -> Option<Result<Barcode>> {
         let mut out = String::new();
         while let Some(res) = self.evs.next() {
             match res {
@@ -41,7 +43,7 @@ impl Iterator for Iter {
                         warn!("Unknown scan code: {:?}", event.code);
                     }
                 },
-                Err(err) => return Some(Err(Error::Io(err))),
+                Err(err) => return Some(Err(err.into())),
             }
         }
         Some(Barcode::from_str(&out))
