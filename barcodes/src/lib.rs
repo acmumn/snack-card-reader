@@ -1,3 +1,7 @@
+//! A userspace driver for the snack machine's barcode reader.
+
+#![deny(missing_docs)]
+
 #[macro_use]
 extern crate error_chain;
 extern crate ioctls;
@@ -17,6 +21,7 @@ use std::fmt::{Display, Formatter};
 use std::fmt::Result as FmtResult;
 use std::str::FromStr;
 
+/// A scanned barcode.
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub struct Barcode(Type, String);
 
@@ -39,14 +44,10 @@ impl FromStr for Barcode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-pub enum BarcodeError {
-    NotACard,
-    UnknownType,
-}
-
+/// The type of card a barcode is from.
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum Type {
+    /// A University of Minnesota student ID.
     UCard,
 }
 

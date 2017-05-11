@@ -5,6 +5,7 @@ use super::event_iter::EventIter;
 use super::scancodes::Key;
 use super::Barcode;
 
+/// An iterator over barcodes swiped.
 pub struct Iter {
     evs: EventIter,
 }
