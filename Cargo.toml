@@ -1,2 +1,2 @@
 [workspace]
-members = ["barcodes"]
+members = ["barcodes", "swipe-server"]

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>swipe-server</title>
+	</head>
+	<body>
+		<h1>swipe-server</h1>
+		<p>This is a server for the snack machine's barcode swipes. It
+		shouldn't be accessed as a web page.<p>
+		<h2>API Documentation</h2>
+		<section>
+			<h3><code>GET /</code></h3>
+			This page.
+		</section>
+		<section>
+			<h3><code>GET /events</code></h3>
+			<span>An <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format">event stream</a>
+				for barcode swipe events.</span>
+			<h4>Event <code>swipe</code></h4>
+			<dl>
+				<dt>Contents</dt>
+				<dd>A JSON blob.</dd>
+			</dl>
+		</section>
+		<section>
+			<h3><code>GET /version</code></h3>
+			<span>Returns the version of the server as a JSON object.</span>
+			<h4>Example Response</h4>
+			<pre><code>{
+	"name": "swipe-server",
+	"version": "0.1.0"
+}</code></pre>
+		</section>
+	</body>
+</html>

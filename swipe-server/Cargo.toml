@@ -1,0 +1,18 @@
+[package]
+authors = ["Nathaniel Ringo <remexre@gmail.com>"]
+name = "swipe-server"
+version = "0.1.0"
+
+[dependencies]
+dotenv = "^0.10.0"
+error-chain = "^0.10.0"
+futures = "^0.1.13"
+log = "^0.3.7"
+mime = "^0.2.3"
+
+[dependencies.barcodes]
+path = "../barcodes"
+
+[dependencies.hyper]
+git = "https://github.com/hyperium/hyper.git"
+version = "0.11.0-a.0"
