@@ -1,0 +1,15 @@
+[package]
+authors = ["Nathan Ringo <remexre@gmail.com>"]
+description = "A simple driver for the snack machine's card reader."
+name = "barcodes"
+version = "0.1.0"
+
+[dependencies]
+error-chain = "^0.10.0"
+ioctls = "^0.5.1"
+log = "^0.3.7"
+num = "^0.1.37"
+
+[replace."ioctls:0.5.1"]
+git = "https://github.com/jmesmon/ioctl.git"
+rev = "1446f5f"

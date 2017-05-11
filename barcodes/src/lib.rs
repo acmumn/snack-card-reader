@@ -1,10 +1,18 @@
+#[macro_use]
+extern crate error_chain;
+extern crate ioctls;
+#[macro_use]
+extern crate log;
+extern crate num;
+
 mod event_iter;
+mod errors;
 mod hw;
 mod iter;
 mod scancodes;
 
-use errors::*;
-pub use self::iter::Iter;
+pub use errors::*;
+pub use iter::Iter;
 use std::fmt::{Display, Formatter};
 use std::fmt::Result as FmtResult;
 use std::str::FromStr;
